@@ -55,7 +55,8 @@ jobs:
         run: |
           mkdir release
           cp -r ./dist/* ./release
-          cp package.json ./release
+           cp package.json release
+          cp yarn.lock release
           zip release.zip ./release/* -r
 
       - name: Upload artifact for deployment job
@@ -93,4 +94,4 @@ jobs:
           app-name: 'nestjsazure'
           slot-name: 'Production'
           package: release.zip
-          startup-command: 'npm ci --production && npm run start:prod'
+          startup-command: 'yarn --frozen-lockfile && npm run start:prod'
