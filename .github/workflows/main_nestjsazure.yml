@@ -48,8 +48,15 @@ jobs:
           yarn run build
           yarn run test
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r -x "node_modules/*"
+      # - name: Zip artifact for deployment
+      #   run: zip release.zip ./* -r
+
+      - name: Copy files hack
+        run: |
+          mkdir release
+          cp -r ./dist/* ./release
+          cp package.json ./release
+          zip release.zip ./release/* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -81,9 +88,9 @@ jobs:
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'nestjsazure'
           slot-name: 'Production'
           package: release.zip
-          # startup-command: 'npm run start:prod'
+          startup-command: 'npm ci --production && npm run start:prod'
