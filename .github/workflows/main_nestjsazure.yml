@@ -91,4 +91,4 @@ jobs:
           app-name: 'nestjsazure'
           slot-name: 'Production'
           package: release.zip
-          startup-command: 'npm run start:prod'
+          # startup-command: 'npm run start:prod'
