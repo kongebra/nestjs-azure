@@ -20,21 +20,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+          cache: 'yarn'
 
-      - name: npm install, build, and test
+      - name: yarn install, build, and test
         run: |
-          yarn --fronzend-lockfile
+          yarn --frozen-lockfile
           yarn build
           yarn test
-
-      - name: Zip artifact for deployment
-        run: zip release.zip ./dist/* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: node-app
-          path: release.zip
+          name: nestjs-app
+          path: ./dist
 
   deploy:
     runs-on: ubuntu-latest
@@ -49,10 +47,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: node-app
-
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
+          name: nestjs-app
 
       - name: Login to Azure
         uses: azure/login@v1
